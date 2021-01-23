@@ -1,0 +1,74 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const ejs = require('ejs'); //This is our templating Engine
+const http = require('http');
+
+const cookieParser = require('cookie-parser');
+// const validator = require('express-validator');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const mongoose = require('mongoose');
+const flash = require('connect-flash');
+const passport = require('passport');
+
+const container = require('./container');  // all this modules will be used only once so we are adding here and not in the container.
+
+
+container.resolve(function (users, _, admin) {     //This will take an anonymo us function
+
+    mongoose.Promise = global.Promise;  //This is required for mongoose to work as it has its own promise to work
+    // !To connect with DB this is the command
+    mongoose.connect('mongodb://localhost/footballkik', { useNewUrlParser: true }); //Added path to our database 
+    const app = SetupExpress();   //Configuring the express server  setupExpress is a function
+
+
+    function SetupExpress() {
+        const app = express();   //Creating an instance of Express app
+        const server = http.createServer(app); //Creating the Server
+        server.listen(3000, function () {    //Server is Listening the port 300
+            console.log('Listening on port 3000');
+        });
+
+        ConfigureExpress(app);
+
+        // Setting up Router
+        const router = require('express-promise-router')();  //since we are using promises we need express-promise-router to set up the router.
+        users.SetRouting(router);  //SetRouting is a function present in controller folder/ user.js
+        //users is a file name called users.js
+        app.use(router);  //Making use of the router 
+        admin.SetRouting(router); 
+    }
+
+    function ConfigureExpress(app) {
+
+        require('./passport/passport-local'); //here we have serialized and deserialized for storing and retreving the user information.
+        require('./passport/passport-facebook');
+        require('./passport/passport-google');
+
+
+        app.use(express.static('public'));  //with this express will be able to render all the static files like img css js in public folder
+        app.use(bodyParser.json());
+        app.set('view engine', 'ejs');    //This is view engine and here we are using ejs
+        app.use(bodyParser.urlencoded({ extended: true })); //we want to parse url encoded in body parser.
+        //* This app.use is an express mid-way
+        app.use(cookieParser()); //This is allow us to use cookies and save cookies in browser
+
+
+        //  app.use(validator()); //this will validate the data on the server side
+
+        app.use(session({  //this will allows us to store and save sessions
+            secret: 'thisisasecretkey',
+            resave: true,
+            saveInitialized: true,
+            store: new MongoStore({ mongooseConnection: mongoose.connection }) //MongoStore will save the data example whenever user will refresh the page the data will not be lost and will be saved in Db.
+        }));
+        app.use(flash()); //To display the flash message
+
+        app.use(passport.initialize());
+        app.use(passport.session()); //add after session or else it will show error
+
+        app.locals._ = _;
+
+    }
+
+});
