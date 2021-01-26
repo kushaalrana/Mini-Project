@@ -14,11 +14,11 @@ const passport = require('passport');
 const container = require('./container');  // all this modules will be used only once so we are adding here and not in the container.
 
 
-container.resolve(function (users, _, admin) {     //This will take an anonymo us function
+container.resolve(function (users, _, admin,home) {     //This will take an anonymo us function
 
     mongoose.Promise = global.Promise;  //This is required for mongoose to work as it has its own promise to work
     // !To connect with DB this is the command
-    mongoose.connect('mongodb://localhost/footballkik', { useNewUrlParser: true }); //Added path to our database 
+    mongoose.connect('mongodb://localhost/footballkik', { useNewUrlParser: true, useCreateIndex: true,useUnifiedTopology: true }); //Added path to our database 
     const app = SetupExpress();   //Configuring the express server  setupExpress is a function
 
 
@@ -37,6 +37,7 @@ container.resolve(function (users, _, admin) {     //This will take an anonymo u
         //users is a file name called users.js
         app.use(router);  //Making use of the router 
         admin.SetRouting(router); 
+        home.SetRouting(router);
     }
 
     function ConfigureExpress(app) {
@@ -59,7 +60,7 @@ container.resolve(function (users, _, admin) {     //This will take an anonymo u
         app.use(session({  //this will allows us to store and save sessions
             secret: 'thisisasecretkey',
             resave: true,
-            saveInitialized: true,
+            saveUninitialized: true,
             store: new MongoStore({ mongooseConnection: mongoose.connection }) //MongoStore will save the data example whenever user will refresh the page the data will not be lost and will be saved in Db.
         }));
         app.use(flash()); //To display the flash message

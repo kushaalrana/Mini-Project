@@ -8,7 +8,9 @@ const simpleDependencies = [      //Adding modules here so that every time we do
      ['_', 'lodash'],           // this is an array of key value pair _=val at index [0] and loadash=v[1]; 
      ['mongoose', 'mongoose'],
      ['passport','passport'],
-     ['validator','express-validator']  //all these we are using in users.js
+     ['validator','express-validator'],  //all these we are using in users.js
+     ['formidable','formidable'],
+     ['Club','./models/clubs']
 ];
 
 

@@ -5,7 +5,7 @@ module.exports = function (_, passport, User,validator) { //passing  _ from serv
         SetRouting: function (router) {      //setting up router 
             router.get('/', this.indexPage);    //routing to the index page
             router.get('/signup', this.getSignUp); //routing to signup page
-            router.get('/home', this.homePage); //to go to homr 
+            // router.get('/home', this.homePage); //to go to homr 
             router.get('/auth/facebook', this.getFacebookLogin);
             router.get('/auth/facebook/callback', this.facebookLogin);
             router.get('/auth/google', this.getGoogleLogin);
@@ -80,8 +80,6 @@ module.exports = function (_, passport, User,validator) { //passing  _ from serv
             failureFlash: true
         }),
 
-        homePage: function (req, res) {
-            return res.render('home'); //this will render homepage or home file.
-        }
+       
     }
 }
