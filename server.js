@@ -13,6 +13,10 @@ const passport = require('passport');
 
 const container = require('./container');  // all this modules will be used only once so we are adding here and not in the container.
 
+const multer = require('multer');
+const fs = require('fs');
+
+
 
 container.resolve(function (users, _, admin,home) {     //This will take an anonymo us function
 
