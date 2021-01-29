@@ -18,7 +18,7 @@ const fs = require('fs');
 
 
 
-container.resolve(function (users, _, admin,home) {     //This will take an anonymo us function
+container.resolve(function (users, _, admin,home,group) {     //This will take an anonymo us function
 
     mongoose.Promise = global.Promise;  //This is required for mongoose to work as it has its own promise to work
     // !To connect with DB this is the command
@@ -42,6 +42,7 @@ container.resolve(function (users, _, admin,home) {     //This will take an anon
         app.use(router);  //Making use of the router 
         admin.SetRouting(router); 
         home.SetRouting(router);
+        group.SetRouting(router);
     }
 
     function ConfigureExpress(app) {

@@ -70,9 +70,13 @@
                                         <hr/>
                                         <select class="form-control" name="country" id="country" >
                                             <option value="">Filter By Country</option>
-											<option>England</option>
+                                            <% _.forEach(country, function(value) { %>
+                                                <option value="<%= value._id %>"><%= value._id %></option>
+                                            <% }) %>
+                                        </select>
+											<!-- <option>England</option>
 											<option>Germany</option>
-											<option>France</option>
+											<option>France</option> -->
                                         </select>
                                         <div class="clearfix"></div>
                                         <button class="btn add-apply">Apply</button>
@@ -89,18 +93,20 @@
                     <% _.forEach(data, function(val){  %>
                     <div class="category-list">
                         <div class="row">
-                            <form action="#" method="post" id="add-fav">
+                            <% _.forEach(val, function(val2){  %>
+                                <form action="#" method="post" id="add-fav">
                                 <div class="item col-md-4">
+                                    <a style="text-decoration: none" href="/group/<%= val2.name %>">
                                     <div class="thumbnail">
-                                       <img src="/uploads/<%= val.image %>" alt="Is it Working">
+                                       <img src="/uploads/<%= val2.image %>" alt="Is it Working">
                                         <div class="caption">
-                                            <h4><%= val.name%></h4>
+                                            <h4><%= val2.name%></h4>
                                             
                                            
                                             <div class="row">
                                                 <div class="col-xs-12 col-md-6">
                                                     <p> 
-                                                        <h4><%= val.country%></h4>
+                                                        <h4><%= val2.country%></h4>
                                                     </p>
                                                 </div>
                                                 
@@ -112,9 +118,12 @@
                                             </div>
                                         </div>
                                     </div>
+                                </a>
                                 </div>
                             </form>
+                            <% })%>
                         </div>
+
                     </div>
                     <% })%>
                 </div>

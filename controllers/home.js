@@ -10,10 +10,32 @@ module.exports = function (async, Club, _) {
                         callback(err, result);
                     })
                 },
+                function(callback){
+                    Club.aggregate([{ 
+                        $group: {
+                            _id: "$country"
+                        }
+                    
+                    }],(err,newResult) => {
+                        callback(err, newResult);
+                    })
+                }
+
+
             ], (err, results) => {
                 const res1 = results[0];
-                console.log(res1);
-                res.render('home',{ title: 'Konvoapp - Home', data: res1});
+                const res2 = results[1];
+                // console.log(res2);
+                // console.log(res1);
+                const dataChunk = [];
+                const chunkSize = 3;
+
+                for(let i = 0; i< res1.length; i+=chunkSize){
+                    dataChunk.push(res1.slice(i, i+chunkSize));
+                }
+                const countrySort = _.sortBy(res2, '_id');
+                // console.log(dataChunk);
+                res.render('home',{ title: 'Konvoapp - Home', data: dataChunk, country: countrySort});
             })
         }
     }
