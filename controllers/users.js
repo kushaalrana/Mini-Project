@@ -14,13 +14,13 @@ module.exports = function (_, passport, User,validator) { //passing  _ from serv
             // router.post('/',User.LoginValidation,this.postLogin);
             router.post('/', [
                 validator.check('email').not().isEmpty().isEmail().withMessage('Email is invalid'),
-                validator.check('password').not().isEmpty().isLength({ min: 5 }).withMessage('Password is required and must be at least 5 characters')
+                validator.check('password').not().isEmpty().withMessage('Password is required and must be at least 5 characters')
             ], this.postValidation, this.postLogin);
 
             router.post('/signup',
                 [validator.check('username').not().isEmpty().isLength({ min: 5 }).withMessage('Username is required and must be at least 5 characters'),
                 validator.check('email').not().isEmpty().isEmail().withMessage('Email is invalid'),
-                validator.check('password').not().isEmpty().isLength({ min: 5 }).withMessage('Password is required and must be at least 5 characters')
+                validator.check('password').not().isEmpty().withMessage('Password is required and must be at least 5 characters')
                 ], this.postValidation, this.postSignUp); //creating a post route and passing this method which is defined below
         },
 
@@ -49,22 +49,33 @@ module.exports = function (_, passport, User,validator) { //passing  _ from serv
     
         indexPage: function (req, res) {
             const errors = req.flash('error');
+            
             return res.render('index', { title: 'FootBallkk | Login', messages: errors, hasErrors: errors.length > 0 });
         },
         getSignUp: function (req, res) {
             const errors = req.flash('error');
+            
             return res.render('signup', { title: 'FootBallkk | SignUp', messages: errors, hasErrors: errors.length > 0 });
         },
         postValidation: function (req, res, next) {
 
             const err = validator.validationResult(req, res);
             const reqErrors = err.array(); //Here we need only the error message
-            const errors = reqErrors.filter(e => e.msg !== 'Invalid value');
+            const errors = reqErrors.filter(e => e.msg !== 'Invalid value');console.log(errors);
             const messages = [];  //creating another error
             errors.forEach((error) => { //looping through the array
                 messages.push(error.msg);   //pushing it into the new array
+             
             });
-            req.flash('error', messages);
+            if(messages.length>0){
+                req.flash('error', messages);
+                if(req.url === '/signup'){
+                    res.redirect('/signup');
+                }
+                else if(req.url === '/'){
+                    res.redirect('/');
+                }
+            }
             return next();
 
         },
