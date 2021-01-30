@@ -35,7 +35,7 @@ module.exports = function (async, Club, _) {
                 }
                 const countrySort = _.sortBy(res2, '_id');
                 // console.log(dataChunk);
-                res.render('home',{ title: 'Konvoapp - Home', data: dataChunk, country: countrySort});
+                res.render('home',{ title: 'Konvoapp - Home', user:req.user, data: dataChunk, country: countrySort});
             })
         }
     }

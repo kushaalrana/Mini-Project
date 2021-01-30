@@ -11,6 +11,7 @@ const simpleDependencies = [      //Adding modules here so that every time we do
      ['validator','express-validator'],  //all these we are using in users.js
      ['formidable','formidable'],
      ['Club','./models/clubs'],
+     ['Users', './models/user'],
      ['async','async']
 ];
 

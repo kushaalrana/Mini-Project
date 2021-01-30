@@ -37,6 +37,7 @@ container.resolve(function (users, _, admin,home,group) {     //This will take a
 
         ConfigureExpress(app);
         require('./socket/groupchat')(io,Users);
+        require('./socket/friend')(io);
         // Setting up Router
         const router = require('express-promise-router')();  //since we are using promises we need express-promise-router to set up the router.
         users.SetRouting(router);  //SetRouting is a function present in controller folder/ user.js
