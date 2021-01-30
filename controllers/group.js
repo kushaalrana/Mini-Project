@@ -6,7 +6,7 @@ module.exports = function(){
 
         groupPage: function(req,res){
             const name = req.params.name;
-            res.render('groupchat/group', {title: ' Konvoapp  - Group', name:name});
+            res.render('groupchat/group', {title: ' Konvoapp  - Group', user:req.user,  groupName:name});
         }
     }
 }
