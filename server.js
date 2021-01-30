@@ -13,6 +13,7 @@ const passport = require('passport');
 const socketIO = require('socket.io');
 const container = require('./container');  // all this modules will be used only once so we are adding here and not in the container.
 
+const {Users} = require('./helpers/UsersClass');
 const multer = require('multer');
 const fs = require('fs');
 
@@ -35,7 +36,7 @@ container.resolve(function (users, _, admin,home,group) {     //This will take a
         });
 
         ConfigureExpress(app);
-        require('./socket/groupchat')(io);
+        require('./socket/groupchat')(io,Users);
         // Setting up Router
         const router = require('express-promise-router')();  //since we are using promises we need express-promise-router to set up the router.
         users.SetRouting(router);  //SetRouting is a function present in controller folder/ user.js
